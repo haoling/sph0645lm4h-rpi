@@ -8,56 +8,56 @@
 #include <sound/initval.h>
 #include <sound/tlv.h>
 
-#define ADMP441_RATE_MIN 16000
-#define ADMP441_RATE_MAX 48000
+#define SPH0645LM4H_RATE_MIN 16000 /* Hz, from data sheet */
+#define SPH0645LM4H_RATE_MAX 64000  /* Hz, from data sheet */
 
-#define ADMP441_FORMATS (SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S32)
+#define SPH0645LM4H_FORMATS (SNDRV_PCM_FMTBIT_S32_LE | SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S16_LE)
 
-static struct snd_soc_dai_driver admp441_dai = {
-	.name = "admp441-hifi",
+static struct snd_soc_dai_driver sph0645lm4h_dai = {
+	.name = "sph0645lm4h-hifi",
 	.capture = {
 		.stream_name = "Capture",
 		.channels_min = 1,
 		.channels_max = 2,
-		.rate_min = ADMP441_RATE_MIN,
-		.rate_max = ADMP441_RATE_MAX,
+		.rate_min = SPH0645LM4H_RATE_MIN,
+		.rate_max = SPH0645LM4H_RATE_MIN,
 		.rates = SNDRV_PCM_RATE_CONTINUOUS,
-		.formats = ADMP441_FORMATS,
+		.formats = SPH0645LM4H_FORMATS,
 	},
 };
 
-static struct snd_soc_codec_driver admp441_codec_driver = { };
+static struct snd_soc_codec_driver sph0645lm4h_codec_driver = { };
 
-static int admp441_probe(struct platform_device *pdev)
+static int sph0645lm4h_probe(struct platform_device *pdev)
 {
-	return snd_soc_register_codec(&pdev->dev, &admp441_codec_driver, &admp441_dai, 1);
+	return snd_soc_register_codec(&pdev->dev, &sph0645lm4h_codec_driver, &sph0645lm4h_dai, 1);
 }
 
-static int admp441_remove(struct platform_device *pdev)
+static int sph0645lm4h_remove(struct platform_device *pdev)
 {
 	snd_soc_unregister_codec(&pdev->dev);
 	return 0;
 }
 
 #ifdef CONFIG_OF
-static const struct of_device_id admp441_ids[] = {
-	{ .compatible = "invensense,admp441", },
+static const struct of_device_id sph0645lm4h_ids[] = {
+	{ .compatible = "invensense,sph0645lm4h", },
 	{ }
 };
-MODULE_DEVICE_TABLE(of, admp441_ids);
+MODULE_DEVICE_TABLE(of, sph0645lm4h_ids);
 #endif
 
-static struct platform_driver admp441_driver = {
+static struct platform_driver sph0645lm4h_driver = {
 	.driver = {
-		.name = "admp441",
-		.of_match_table = of_match_ptr(admp441_ids),
+		.name = "sph0645lm4h",
+		.of_match_table = of_match_ptr(sph0645lm4h_ids),
 	},
-	.probe = admp441_probe,
-	.remove = admp441_remove,
+	.probe = sph0645lm4h_probe,
+	.remove = sph0645lm4h_remove,
 };
 
-module_platform_driver(admp441_driver);
+module_platform_driver(sph0645lm4h_driver);
 
-MODULE_DESCRIPTION("ADMP441 driver");
-MODULE_AUTHOR("George Talusan <george.talusan@gmail.com>");
+MODULE_DESCRIPTION("SPH0645LM4H driver");
+MODULE_AUTHOR("lcharpen2");
 MODULE_LICENSE("GPL v2");
